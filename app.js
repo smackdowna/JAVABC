@@ -16,13 +16,13 @@ app.use(
   })
 );
 
-app.use(
-  cors({
-    origin: "https://javas-ports-frontend.vercel.app",
-    credentials: true,
-    methods: ["GET", "POST", "DELETE", "PUT"],
-  })
-);
+const corsOptions = {
+  origin: ["https://javas-ports-frontend.vercel.app", "http://localhost:3000"],
+  credentials: true,
+  methods: ["GET", "POST", "DELETE", "PUT"],
+};
+
+app.use(cors(corsOptions));
 
 //Route imports
 const user = require("./routes/UserRoute");
