@@ -18,7 +18,7 @@ app.use(
 
 app.use(
   cors({
-    origin: ["https://javas-ports-frontend.vercel.app"],
+    origin: "https://javas-ports-frontend.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "DELETE", "PUT"],
   })
@@ -39,6 +39,6 @@ app.use("/api/v1/", admin);
 
 module.exports = app;
 
-app.get("/", (req, res) => res.send(`<h1>Site is working</h1>`));
+app.get("/", (req, res) => res.send(`<h1>working fine</h1>`));
 //middleware
 app.use(errorMiddleware);
