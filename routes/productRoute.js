@@ -10,6 +10,7 @@ const {
   createProductReview,
   getProductReviews,
   deleteReview,
+  getAdminProducts,
 } = require("../controllers/productController");
 const multipleUpload = require("../middleware/multipleMulter");
 
@@ -28,6 +29,8 @@ router
 router.route("/products").get(getAllProducts);
 
 router.route("/product/categories").get(getAllCategories);
+
+router.route("/admin/product").get(isAuthenticatedUser,authorizeRoles("admin"),getAdminProducts);
 
 router
   .route("/product/:id")

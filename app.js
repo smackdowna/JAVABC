@@ -4,10 +4,13 @@ const errorMiddleware = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const NodeCache = require('node-cache');
 
 //config
 dotenv.config({ path: "./config/config.env" });
 
+
+exports.myCache = new NodeCache();
 app.use(express.json());
 app.use(cookieParser());
 app.use(

@@ -5,35 +5,7 @@ const ApiFeatures = require("../utils/apifeatures");
 const cloudinary = require("cloudinary");
 const getDataUri = require("../utils/dataUri");
 const User = require("../models/UserModel");
-
-// Create Product -- Admin
-// exports.createProduct = catchAsyncErrors(async (req, res, next) => {
-//   const { name, description, price, category, stock } = req.body;
-//   //const images = req.files; // Assuming you are using multer or similar middleware for multiple file uploads
-
-//   if (!name || !description || !price || !category || !stock) {
-//     return next(new ErrorHander("All Field Required", 404));
-//   }
-
-//   const product = await Product.create({
-//     name,
-//     description,
-//     price,
-//     category,
-//     stock,
-//     images: [
-//       {
-//         public_id: "gfyzbc",
-//         url: "fycg",
-//       },
-//     ],
-//   });
-
-//   res.status(201).json({
-//     success: true,
-//     product,
-//   });
-// });
+const { myCache } = require("../app");
 
 //Create Product -- Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
@@ -87,6 +59,8 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     images: productImages,
   });
 
+  myCache.del("all-products","categories");
+
   res.status(201).json({
     success: true,
     message: "Product Created Successfully",
@@ -121,7 +95,14 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
 //get All categories
 exports.getAllCategories = catchAsyncErrors(async (req, res, next) => {
-  const categories = await Product.distinct("category");
+  let categories;
+
+  if (myCache.has("categories")) {
+    categories = JSON.parse(myCache.get("categories"));
+  } else {
+    categories = await Product.distinct("category");
+    myCache.set("categories", JSON.stringify(categories));
+  }
 
   res.status(200).json({
     success: true,
@@ -129,15 +110,23 @@ exports.getAllCategories = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Get All Product (Admin)
+// get all admin products
 exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
-  const products = await Product.find().sort({ createdAt: -1 });
 
-  res.status(200).json({
+  let products;
+  if (myCache.has("all-products")) {
+    products = JSON.parse(myCache.get("all-products"));
+  } else {
+    products = await Product.find().sort({ createdAt: -1 });
+    myCache.set("all-products", JSON.stringify(products));
+  }
+
+  return res.status(200).json({
     success: true,
     products,
   });
 });
+
 
 // Get Product Details
 exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
@@ -164,6 +153,8 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
   // Handle product details update
   product.set(req.body);
   await product.save();
+  myCache.del("all-products","categories");
+  
 
   // Handle image updates
   const images = req.files; // Assuming you are using multer or similar middleware for multiple file uploads
@@ -191,6 +182,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     // Update product with new images
     product.images = updatedImages;
     await product.save();
+    myCache.del("all-products","categories");
   }
 
   res.status(200).json({
@@ -199,29 +191,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// Delete Product
-// exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
-//   const product = await Product.findById(req.params.id);
-
-//   if (!product) {
-//     return next(new ErrorHander("Product not found", 404));
-//   }
-
-//   // Delete images from Cloudinary
-//   if (product.images && product.images.length > 0) {
-//     for (const image of product.images) {
-//       await cloudinary.uploader.destroy(image.public_id);
-//     }
-//   }
-
-//   await product.remove();
-
-//   res.status(200).json({
-//     success: true,
-//     message: "Product Delete Successfully",
-//   });
-// });
-
+//delete product
 exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
   const productId = req.params.id;
 
@@ -247,6 +217,7 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
 
   // Remove the product itself
   await product.remove();
+  myCache.del("all-products","categories");
 
   res.status(200).json({
     success: true,
