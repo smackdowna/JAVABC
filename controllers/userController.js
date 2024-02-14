@@ -7,20 +7,13 @@ const cloudinary = require("cloudinary");
 const sendEmail = require("../utils/sendEmail.js");
 const getDataUri = require("../utils/dataUri.js");
 const Product = require("../models/productModel");
+const fs = require("fs");
 
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { full_name, phoneNo, gender, email, password, confirm_password } =
-    req.body;
+  const { full_name, phoneNo, email, password, confirm_password } = req.body;
 
-  if (
-    !full_name ||
-    !phoneNo ||
-    !gender ||
-    !email ||
-    !password ||
-    !confirm_password
-  )
+  if (!full_name || !phoneNo || !email || !password || !confirm_password)
     return next(new ErrorHandler("Please fill all details", 400));
 
   if (password != confirm_password)
@@ -28,15 +21,54 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       new ErrorHandler("Password and Confirm Password Doesn't Match", 400)
     );
 
-  const user = await User.create({
+  let user = await User.findOne({ email });
+
+  if (user) {
+    return res
+      .status(400)
+      .json({ success: false, message: "User already exists" });
+  }
+
+  const otp = Math.floor(Math.random() * 1000000);
+
+  user = await User.create({
     full_name,
     email,
     phoneNo,
-    gender,
     password,
+    otp,
+    otp_expiry: new Date(Date.now() + process.env.OTP_EXPIRE * 60 * 1000),
   });
 
-  sendToken(user, 201, res);
+  await sendEmail(email, "Verify your account", `Your OTP is ${otp}`);
+
+  sendToken(
+    user,
+    201,
+    res,
+    "OTP sent to your email, please verify your account"
+  );
+});
+
+//verify 
+exports.verify = catchAsyncErrors(async (req, res, next) => {
+  const otp = Number(req.body.otp);
+
+  const user = await User.findById(req.user.id);
+
+  if (user.otp !== otp || user.otp_expiry < Date.now()) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid OTP or has been Expired" });
+  }
+
+  user.verified = true;
+  user.otp = null;
+  user.otp_expiry = null;
+
+  await user.save();
+
+  sendToken(user, 200, res,"Account Verified");
 });
 
 //login user

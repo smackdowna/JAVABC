@@ -27,7 +27,6 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    required: [true, "Please Enter Your gender"],
   },
   address: {
     type: String,
@@ -67,10 +66,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
-  status: {
-    type: String,
-    default: "Active",
+  verified: {
+    type: Boolean,
+    default: false,
   },
+  otp: Number,
+  otp_expiry: Date,
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -115,5 +116,7 @@ userSchema.methods.getResetPasswordToken = function () {
 
   return resetToken;
 };
+
+userSchema.index({ otp_expiry: 1 }, { expireAfterSeconds: 0 });
 
 module.exports = mongoose.model("Users", userSchema);

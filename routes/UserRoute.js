@@ -13,6 +13,7 @@ const {
   updateUserRole,
   addWishlist,
   removeWishlist,
+  verify,
 } = require("../controllers/userController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 const singleUpload = require("../middleware/multer");
@@ -21,6 +22,8 @@ const router = express.Router();
 
 //register
 router.route("/register").post(registerUser);
+
+router.route("/verify").post(isAuthenticatedUser, verify);
 
 //login
 router.route("/login").post(loginUser);
