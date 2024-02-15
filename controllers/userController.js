@@ -50,7 +50,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   );
 });
 
-//verify 
+//verify
 exports.verify = catchAsyncErrors(async (req, res, next) => {
   const otp = Number(req.body.otp);
 
@@ -68,7 +68,7 @@ exports.verify = catchAsyncErrors(async (req, res, next) => {
 
   await user.save();
 
-  sendToken(user, 200, res,"Account Verified");
+  sendToken(user, 200, res, "Account Verified");
 });
 
 //login user
@@ -235,17 +235,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
 // //update user details
 exports.updateUserDetails = catchAsyncErrors(async (req, res, next) => {
-  const {
-    full_name,
-    email,
-    gender,
-    country,
-    city,
-    street,
-    address,
-    pin_code,
-    phone,
-  } = req.body;
+  const { full_name, email, phone } = req.body;
 
   const file = req.file; // Assuming you are using multer or similar middleware for file uploads
 
@@ -253,12 +243,6 @@ exports.updateUserDetails = catchAsyncErrors(async (req, res, next) => {
 
   if (full_name) user.full_name = full_name;
   if (email) user.email = email;
-  if (country) user.country = country;
-  if (address) user.address = address;
-  if (gender) user.gender = gender;
-  if (city) user.city = city;
-  if (street) user.street = street;
-  if (pin_code) user.postal_code = postal_code;
   if (phone) user.phone = phone;
 
   if (!user.avatar) {
@@ -387,5 +371,23 @@ exports.removeWishlist = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Removed Wishlist",
+  });
+});
+
+//update address
+exports.updateUserAddress = catchAsyncErrors(async (req, res, next) => {
+  const { primaryaddress, secondaryaddress, thirdaddress } = req.body;
+
+  const user = await User.findById(req.user._id);
+
+  if (primaryaddress) user.primaryaddress = primaryaddress;
+  if (secondaryaddress) user.secondaryaddress = secondaryaddress;
+  if (thirdaddress) user.thirdaddress = thirdaddress;
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Address Updated Successfully",
   });
 });

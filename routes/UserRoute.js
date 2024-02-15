@@ -14,6 +14,7 @@ const {
   addWishlist,
   removeWishlist,
   verify,
+  updateUserAddress,
 } = require("../controllers/userController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 const singleUpload = require("../middleware/multer");
@@ -45,6 +46,10 @@ router.route("/password/update").put(isAuthenticatedUser, updatePassword);
 
 //update user details
 router.route("/me/update").put(isAuthenticatedUser, singleUpload,updateUserDetails);
+
+//update address
+//update user details
+router.route("/me/updateAddress").put(isAuthenticatedUser,updateUserAddress);
 
 //get all users--Admin
 router

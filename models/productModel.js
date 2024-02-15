@@ -10,9 +10,22 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please Enter product Description"],
   },
-  price: {
+  keyFeatures: {
+    type: String,
+    required: [true, "Please Enter keyFeatures"],
+  },
+  specification: {
+    type: String,
+    required: [true, "Please Enter product specification"],
+  },
+  baseprice: {
     type: Number,
-    required: [true, "Please Enter product Price"],
+    required: [true, "Please Enter base Price"],
+    maxLength: [8, "Price cannot exceed 8 characters"],
+  },
+  discountedprice: {
+    type: Number,
+    required: [true, "Please Enter discounted price"],
     maxLength: [8, "Price cannot exceed 8 characters"],
   },
   ratings: {
@@ -52,6 +65,13 @@ const productSchema = new mongoose.Schema({
     required: [true, "Please Enter product Stock"],
     maxLength: [4, "Stock cannot exceed 4 characters"],
     default: 1,
+  },
+  color:{
+    type: String,
+  },
+  Availablecolor: {
+    type: String,
+   
   },
   numOfReviews: {
     type: Number,

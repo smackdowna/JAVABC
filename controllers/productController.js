@@ -12,23 +12,33 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   const {
     name,
     description,
-    price,
+    keyFeatures,
+    specification,
+    baseprice,
+    discountedprice,
     category,
     sub_category,
     sub_category2,
     size,
     stock,
+    color,
+    Availablecolor
   } = req.body;
   const images = req.files; // Assuming you are using multer or similar middleware for multiple file uploads
 
   if (
     !name ||
     !description ||
-    !price ||
+    !keyFeatures ||
+    !specification ||
+    !baseprice ||
+    !discountedprice ||
     !category ||
     !stock ||
     !sub_category ||
-    !size
+    !size ||
+    !color ||
+    !Availablecolor
   ) {
     return next(new ErrorHander("All Field Required", 404));
   }
@@ -50,12 +60,17 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   await Product.create({
     name,
     description,
-    price,
+    keyFeatures,
+    specification,
+    baseprice,
+    discountedprice,
     category,
-    stock,
     sub_category,
-    size,
     sub_category2,
+    size,
+    stock,
+    color,
+    Availablecolor,
     images: productImages,
   });
 
@@ -69,7 +84,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 
 // Get All Product
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
-  const resultPerPage = 10 ;
+  const resultPerPage = 15;
   const productsCount = await Product.countDocuments();
 
   const apiFeature = new ApiFeatures(Product.find().sort({ createdAt: -1 }), req.query)

@@ -28,17 +28,47 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
-  address: {
-    type: String,
+  primaryaddress:{
+    address: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    pin_code: {
+      type: String,
+    },
   },
-  city: {
-    type: String,
+  secondaryaddress:{
+    address: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    pin_code: {
+      type: String,
+    },
   },
-  street: {
-    type: String,
-  },
-  pin_code: {
-    type: String,
+  thirdaddress:{
+    address: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    pin_code: {
+      type: String,
+    },
   },
   phoneNo: {
     type: Number,
