@@ -14,7 +14,10 @@ const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
 router.route("/order/new").post(isAuthenticatedUser, newOrder);
 
-router.route("/order/:id").get(isAuthenticatedUser, getSingleOrder).put(isAuthenticatedUser,cancelOrder);
+router
+  .route("/order/:id")
+  .get(isAuthenticatedUser, getSingleOrder)
+  .put(isAuthenticatedUser, cancelOrder);
 
 router.route("/orders/me").get(isAuthenticatedUser, myOrders);
 
@@ -27,4 +30,5 @@ router
   .put(isAuthenticatedUser, authorizeRoles("admin"), updateOrder)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteOrder);
 
+router.route("/order/cancel/:id").put(isAuthenticatedUser, cancelOrder);
 module.exports = router;
