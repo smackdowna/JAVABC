@@ -40,7 +40,20 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     otp_expiry: new Date(Date.now() + process.env.OTP_EXPIRE * 60 * 1000),
   });
 
-  await sendEmail(email, "Verify your account", `Your OTP is ${otp}`);
+  const emailMessage = `Dear ${user.full_name},
+
+Thank you for registering for the Java Sport event. To ensure the security of your account and complete the registration process, please verify your account by entering the following One-Time Password (OTP):
+
+OTP: ${otp}
+
+This OTP is valid for a limited time, so we recommend verifying your account as soon as possible. If you did not initiate this registration or have any concerns, please contact our support team immediately.
+
+Thank you for choosing Java Sports.
+
+Best regards,
+Java Sports`;
+
+  await sendEmail(email, "Verify your account", emailMessage);
 
   sendToken(
     user,
