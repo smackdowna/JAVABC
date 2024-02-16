@@ -3,6 +3,7 @@ const Product = require("../models/productModel");
 const ErrorHander = require("../utils/errorhandler");
 const catchAsyncErrors = require("../middleware/catchAsyncError");
 const User = require("../models/UserModel");
+const { myCache } = require("../app");
 
 // Create new Order
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
@@ -46,6 +47,7 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     await updateStock(o.product, o.quantity);
   });
 
+  myCache.del("all-orders");
   res.status(201).json({
     success: true,
     message: "We have recieved your Order",
@@ -55,8 +57,6 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
 // get Single Order
 exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-
-  
 
   const id = order.user;
 
@@ -89,7 +89,14 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
 // get all Orders -- Admin
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
   const ordersCount = await Order.countDocuments();
-  const orders = await Order.find().sort({ createdAt: -1 });
+
+  let orders;
+  if (myCache.has("all-orders")) {
+    orders = JSON.parse(myCache.get("all-orders"));
+  } else {
+    orders = await Order.find().sort({ createdAt: -1 });
+    myCache.set("all-orders", JSON.stringify(orders));
+  }
 
   res.status(200).json({
     success: true,
@@ -117,6 +124,10 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   }
 
   await order.save({ validateBeforeSave: false });
+
+  myCache.del("all-orders");
+
+
   res.status(200).json({
     success: true,
     message: "order updated",
@@ -141,6 +152,7 @@ exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
 
   await order.remove();
 
+  myCache.del("all-orders");
   res.status(200).json({
     success: true,
     message: "Order Deleted",
