@@ -11,6 +11,10 @@ const {
 const router = express.Router();
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
+const {
+  checkout,
+  paymentVerification,
+} = require("../controllers/paymentController");
 
 router.route("/order/new").post(isAuthenticatedUser, newOrder);
 
@@ -31,4 +35,13 @@ router
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteOrder);
 
 router.route("/order/cancel/:id").put(isAuthenticatedUser, cancelOrder);
+
+//checkout
+router.route("/checkout").post(isAuthenticatedUser, checkout);
+
+//payment verification
+router
+  .route("/paymentverification")
+  .post(isAuthenticatedUser, paymentVerification);
+
 module.exports = router;

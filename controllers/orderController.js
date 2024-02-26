@@ -17,6 +17,9 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     shippingPrice,
     totalPrice,
     discount,
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
   } = req.body;
 
   if (
@@ -27,7 +30,10 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     !taxPrice ||
     !shippingPrice ||
     !totalPrice ||
-    !discount
+    !discount ||
+    !razorpay_order_id ||
+    !razorpay_payment_id ||
+    !razorpay_signature
   )
     return next(new ErrorHander("please enter all details", 400));
 
@@ -40,6 +46,9 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     shippingPrice,
     totalPrice,
     discount,
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
     paidAt: Date.now(),
     user: req.user._id,
   });

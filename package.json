@@ -27,6 +27,7 @@
     "node-cache": "^5.1.2",
     "nodemailer": "^6.9.5",
     "nodemon": "^3.0.1",
+    "razorpay": "^2.9.2",
     "redis": "^4.6.12",
     "stripe": "^13.8.0",
     "validator": "^13.11.0"

@@ -11,9 +11,9 @@ const fs = require("fs");
 
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { full_name, phoneNo, email, password, confirm_password } = req.body;
+  const { full_name, phoneNo, email, password, confirm_password,dob } = req.body;
 
-  if (!full_name || !phoneNo || !email || !password || !confirm_password)
+  if (!full_name || !phoneNo || !email || !password || !confirm_password || !dob)
     return next(new ErrorHandler("Please fill all details", 400));
 
   if (password != confirm_password)
@@ -36,6 +36,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     email,
     phoneNo,
     password,
+    dob,
     otp,
     otp_expiry: new Date(Date.now() + process.env.OTP_EXPIRE * 60 * 1000),
   });
