@@ -20,7 +20,7 @@ app.use(
 
 app.use(
   cors({
-    origin: "*",
+    origin: ["https://javas-ports-frontend.vercel.app","http://localhost:3000"],
     credentials: true,
     methods: ["GET", "POST", "DELETE", "PUT"],
   })
