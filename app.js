@@ -18,13 +18,13 @@ app.use(
   })
 );
 
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-  methods: ["GET", "POST", "DELETE", "PUT"],
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+    methods: ["GET", "POST", "DELETE", "PUT"],
+  })
+);
 
 //Route imports
 const user = require("./routes/UserRoute");
