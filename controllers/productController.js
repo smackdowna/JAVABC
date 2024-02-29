@@ -84,7 +84,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 
 // Get All Product
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
-  const resultPerPage = 15;
+  
   const productsCount = await Product.countDocuments();
 
   const apiFeature = new ApiFeatures(Product.find().sort({ createdAt: -1 }), req.query)
@@ -95,7 +95,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
   let filteredProductsCount = products.length;
 
-  apiFeature.pagination(resultPerPage);
+  
 
   products = await apiFeature.query;
 
@@ -103,7 +103,6 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
     success: true,
     products,
     productsCount,
-    resultPerPage,
     filteredProductsCount,
   });
 });
