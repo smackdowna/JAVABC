@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
   },
-  primaryaddress:{
+  primaryaddress: {
     address: {
       type: String,
     },
@@ -39,10 +39,13 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
     pin_code: {
+      type: String,
+    },
+    landmark: {
       type: String,
     },
   },
-  secondaryaddress:{
+  secondaryaddress: {
     address: {
       type: String,
     },
@@ -53,10 +56,13 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
     pin_code: {
+      type: String,
+    },
+    landmark: {
       type: String,
     },
   },
-  thirdaddress:{
+  thirdaddress: {
     address: {
       type: String,
     },
@@ -67,6 +73,9 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
     pin_code: {
+      type: String,
+    },
+    landmark: {
       type: String,
     },
   },
@@ -75,7 +84,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please Enter Your Mobile No"],
     maxLength: [30, "Name cannot exceed 10 Number"],
   },
-  dob:{
+  dob: {
     type: String,
     required: [true, "Please Enter your date of birth"],
   },
@@ -93,7 +102,7 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
       },
-      poster:String,
+      poster: String,
     },
   ],
   role: {

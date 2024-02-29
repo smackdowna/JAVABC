@@ -127,7 +127,7 @@ exports.getAllCategories = catchAsyncErrors(async (req, res, next) => {
 
 // get all admin products
 exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
-
+  const productsCount = await Product.countDocuments();
   let products;
   if (myCache.has("all-products")) {
     products = JSON.parse(myCache.get("all-products"));
@@ -139,6 +139,7 @@ exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
   return res.status(200).json({
     success: true,
     products,
+    productsCount
   });
 });
 

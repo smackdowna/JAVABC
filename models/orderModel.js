@@ -15,8 +15,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-
-    country: {
+    landmark: {
       type: String,
       required: true,
     },
@@ -46,6 +45,13 @@ const orderSchema = new mongoose.Schema({
       image: {
         type: String,
         required: true,
+      },
+      color: {
+        type: String,
+      },
+      size: {
+        type: String,
+        required: [true, "Please Enter Product Size"],
       },
       product: {
         type: mongoose.Schema.ObjectId,
