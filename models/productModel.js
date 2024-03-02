@@ -66,12 +66,11 @@ const productSchema = new mongoose.Schema({
     maxLength: [4, "Stock cannot exceed 4 characters"],
     default: 1,
   },
-  color:{
+  color: {
     type: String,
   },
   Availablecolor: {
     type: String,
-   
   },
   numOfReviews: {
     type: Number,
@@ -87,6 +86,9 @@ const productSchema = new mongoose.Schema({
       name: {
         type: String,
         required: true,
+      },
+      avatar: {
+        type: String,
       },
       rating: {
         type: Number,
