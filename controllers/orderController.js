@@ -11,10 +11,10 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
   const {
     shippingInfo,
     orderItems,
-    paymentInfo,
+    // paymentInfo,
     itemsPrice,
-    taxPrice,
-    shippingPrice,
+    // taxPrice,
+    // shippingPrice,
     totalPrice,
     discount,
     razorpay_order_id,
@@ -25,10 +25,10 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
   if (
     !shippingInfo ||
     !orderItems ||
-    !paymentInfo ||
+    // !paymentInfo ||
     !itemsPrice ||
-    !taxPrice ||
-    !shippingPrice ||
+    // !taxPrice ||
+    // !shippingPrice ||
     !totalPrice ||
     !discount ||
     !razorpay_order_id ||
@@ -40,10 +40,10 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.create({
     shippingInfo,
     orderItems,
-    paymentInfo,
+    // paymentInfo,
     itemsPrice,
-    taxPrice,
-    shippingPrice,
+    // taxPrice,
+    // shippingPrice,
     totalPrice,
     discount,
     razorpay_order_id,

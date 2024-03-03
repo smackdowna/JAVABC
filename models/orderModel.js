@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
   shippingInfo: {
+    landmark: {
+      type: String,
+      required: true,
+    },
     address: {
       type: String,
       required: true,
@@ -65,16 +69,16 @@ const orderSchema = new mongoose.Schema({
     ref: "Users",
     required: true,
   },
-  paymentInfo: {
-    id: {
-      type: String,
-      required: true,
-    },
-    status: {
-      type: String,
-      required: true,
-    },
-  },
+  // paymentInfo: {
+  //   id: {
+  //     type: String,
+  //     required: true,
+  //   },
+  //   status: {
+  //     type: String,
+  //     required: true,
+  //   },
+  // },
   paidAt: {
     type: Date,
     required: true,
@@ -84,16 +88,11 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
-  taxPrice: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  shippingPrice: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
+  // shippingPrice: {
+  //   type: Number,
+  //   required: true,
+  //   default: 0,
+  // },
   totalPrice: {
     type: Number,
     required: true,

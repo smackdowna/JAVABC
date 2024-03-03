@@ -2,7 +2,8 @@ const catchAsyncErrors = require("../middleware/catchAsyncError");
 const Order = require("../models/orderModel");
 const ErrorHandler = require("../utils/errorhandler");
 const Razorpay = require("razorpay");
-
+const crypto = require('crypto');
+require('dotenv').config();
 
 const instance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
@@ -63,7 +64,7 @@ exports.paymentVerification = async (req, res) => {
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_APT_SECRET)
+    .createHmac("sha256", process.env.RAZORPAY_API_SECRET)
     .update(body.toString())
     .digest("hex");
 
