@@ -17,38 +17,26 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     // shippingPrice,
     totalPrice,
     discount,
-    razorpay_order_id,
     razorpay_payment_id,
-    razorpay_signature,
   } = req.body;
 
   if (
     !shippingInfo ||
     !orderItems ||
-    // !paymentInfo ||
     !itemsPrice ||
-    // !taxPrice ||
-    // !shippingPrice ||
     !totalPrice ||
     !discount ||
-    !razorpay_order_id ||
-    !razorpay_payment_id ||
-    !razorpay_signature
+    !razorpay_payment_id
   )
     return next(new ErrorHander("please enter all details", 400));
 
   const order = await Order.create({
     shippingInfo,
     orderItems,
-    // paymentInfo,
     itemsPrice,
-    // taxPrice,
-    // shippingPrice,
     totalPrice,
     discount,
-    razorpay_order_id,
     razorpay_payment_id,
-    razorpay_signature,
     paidAt: Date.now(),
     user: req.user._id,
   });
@@ -93,7 +81,8 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
   // Respond to the client
   res.status(201).json({
     success: true,
-    message: "We have received your order. You will receive a confirmation email shortly.",
+    message:
+      "We have received your order. You will receive a confirmation email shortly.",
   });
 });
 
@@ -121,7 +110,9 @@ exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
 
 // get logged in user  Orders
 exports.myOrders = catchAsyncErrors(async (req, res, next) => {
-  const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
+  const orders = await Order.find({ user: req.user._id }).sort({
+    createdAt: -1,
+  });
 
   res.status(200).json({
     success: true,
@@ -170,7 +161,6 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
 
   myCache.del("all-orders");
 
-
   res.status(200).json({
     success: true,
     message: "order updated",
@@ -209,7 +199,7 @@ exports.cancelOrder = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Order not found with this Id", 404));
   }
 
-  if(order.orderStatus==='cancelled'){
+  if (order.orderStatus === "cancelled") {
     return next(new ErrorHander("This product is already cancelled", 404));
   }
 
@@ -253,6 +243,7 @@ exports.cancelOrder = catchAsyncErrors(async (req, res, next) => {
   // Respond to the client
   res.status(200).json({
     success: true,
-    message: "Your order is cancelled. You will receive a confirmation email shortly.",
+    message:
+      "Your order is cancelled. You will receive a confirmation email shortly.",
   });
 });

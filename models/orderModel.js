@@ -50,7 +50,6 @@ const orderSchema = new mongoose.Schema({
       },
       size: {
         type: String,
-        required: [true, "Please Enter Product Size"],
       },
       product: {
         type: mongoose.Schema.ObjectId,
@@ -64,16 +63,6 @@ const orderSchema = new mongoose.Schema({
     ref: "Users",
     required: true,
   },
-  // paymentInfo: {
-  //   id: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   status: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
   paidAt: {
     type: Date,
     required: true,
@@ -83,11 +72,6 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
-  // shippingPrice: {
-  //   type: Number,
-  //   required: true,
-  //   default: 0,
-  // },
   totalPrice: {
     type: Number,
     required: true,
@@ -103,15 +87,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: "Processing",
   },
-  razorpay_order_id: {
-    type: String,
-    required: true,
-  },
   razorpay_payment_id: {
-    type: String,
-    required: true,
-  },
-  razorpay_signature: {
     type: String,
     required: true,
   },
