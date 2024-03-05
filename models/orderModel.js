@@ -5,7 +5,7 @@ const orderSchema = new mongoose.Schema({
     landmark: {
       type: String,
       required: true,
-    },
+    },  
     address: {
       type: String,
       required: true,
