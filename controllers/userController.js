@@ -9,6 +9,22 @@ const getDataUri = require("../utils/dataUri.js");
 const Product = require("../models/productModel");
 const fs = require("fs");
 
+
+async function deleteUsersWithExpiredOTP() {
+  try {
+      const currentTime = Date.now();
+      await User.deleteMany({
+          'otp_expiry': { $lte: currentTime },
+          'otp': { $ne: null }, // Exclude users who have already verified OTP
+      });
+  } catch (error) {
+      console.error('Error deleting users with expired OTP:', error);
+  }
+}
+
+setInterval(deleteUsersWithExpiredOTP, 60 * 1000);
+
+
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   const { full_name, phoneNo, email, password, confirm_password,dob } = req.body;
@@ -54,21 +70,30 @@ Thank you for choosing Java Sports.
 Best regards,
 Java Sports`;
 
-  await sendEmail(email, "Verify your account", emailMessage);
+  // await sendEmail(email, "Verify your account", emailMessage);
 
-  sendToken(
-    user,
-    201,
-    res,
-    "OTP sent to your email, please verify your account"
-  );
+  // sendToken(
+  //   user,
+  //   201,
+  //   res,
+  //   "OTP sent to your email, please verify your account"
+  // );
+  res.status(201).json({
+    success: true,   
+    message: "OTP sent to your email",
+  })
 });
 
 //verify
 exports.verify = catchAsyncErrors(async (req, res, next) => {
   const otp = Number(req.body.otp);
 
-  const user = await User.findById(req.user.id);
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return next(new ErrorHandler("User Doesn't exist", 404));
+  } 
+
 
   if (user.otp !== otp || user.otp_expiry < Date.now()) {
     return res
@@ -153,7 +178,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const message = `Your password reset token is :- \n\n ${frontendurl} \n\nIf you have not requested this email then, please ignore it.`;
 
   try {
-    await sendEmail(user.email, "Java Sports Reset Password", message);
+    // await sendEmail(user.email, "Java Sports Reset Password", message);
 
     res.status(200).json({
       success: true,

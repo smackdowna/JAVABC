@@ -24,7 +24,7 @@ const router = express.Router();
 //register
 router.route("/register").post(registerUser);
 
-router.route("/verify").post(isAuthenticatedUser, verify);
+router.route("/verify").post(verify);
 
 //login
 router.route("/login").post(loginUser);
