@@ -31,7 +31,7 @@ class ApiFeatures {
 
     this.query = this.query.find(JSON.parse(queryStr));
     return this;
-  }
+  } 
 
   pagination(resultPerPage) {
     const currentPage = Number(this.queryStr.page) || 1;
