@@ -23,10 +23,14 @@ const productSchema = new mongoose.Schema({
     required: [true, "Please Enter base Price"],
     maxLength: [8, "Price cannot exceed 8 characters"],
   },
-  discountedprice: {
+  discountedpercent: {
     type: Number,
-    required: [true, "Please Enter discounted price"],
+    required: [true, "Please Enter discounted percent"],
     maxLength: [8, "Price cannot exceed 8 characters"],
+  },
+  side:{
+    type: String,
+    required: [true, "Please Enter product specification"],
   },
   ratings: {
     type: Number,
