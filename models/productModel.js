@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema({
   },
   side:{
     type: String,
-    required: [true, "Please Enter product specification"],
+    
   },
   ratings: {
     type: Number,
