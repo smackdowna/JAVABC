@@ -40,7 +40,6 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     !size ||
     !color ||
     !Availablecolor ||
-    !side
   ) {
     return next(new ErrorHander("All Field Required", 404));
   }
