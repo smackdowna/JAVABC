@@ -70,7 +70,7 @@ Thank you for choosing Java Sports.
 Best regards,
 Java Sports`;
 
-  // await sendEmail(email, "Verify your account", emailMessage);
+ await sendEmail(email, "Verify your account", emailMessage);
 
  
   res.status(201).json({
@@ -173,7 +173,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const message = `Your password reset token is :- \n\n ${frontendurl} \n\nIf you have not requested this email then, please ignore it.`;
 
   try {
-    // await sendEmail(user.email, "Java Sports Reset Password", message);
+    await sendEmail(user.email, "Java Sports Reset Password", message);
 
     res.status(200).json({
       success: true,

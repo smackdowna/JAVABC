@@ -11,10 +11,7 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
   const {
     shippingInfo,
     orderItems,
-    // paymentInfo,
     itemsPrice,
-    // taxPrice,
-    // shippingPrice,
     totalPrice,
     discount,
     razorpay_payment_id,
@@ -57,14 +54,14 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     )
     .join("\n");
 
-  // await sendEmail(
-  //   userEmail,
-  //   "Order Confirmation",
-  //   `Dear ${req.user.full_name},\n\nThank you for placing an order with us. Your order has been successfully received.\n\nOrder ID: ${order._id}\nTotal Amount: ${totalPrice}\n\nOrder Items:\n${userOrderItems}\n\nWe will notify you once your order is shipped. If you have any questions, feel free to contact us.\n\nBest Regards,\nJava Sports`
-  // );
+  await sendEmail(
+    userEmail,
+    "Order Confirmation",
+    `Dear ${req.user.full_name},\n\nThank you for placing an order with us. Your order has been successfully received.\n\nOrder ID: ${order._id}\nTotal Amount: ${totalPrice}\n\nOrder Items:\n${userOrderItems}\n\nWe will notify you once your order is shipped. If you have any questions, feel free to contact us.\n\nBest Regards,\nJava Sports`
+  );
 
   // Notify admin about the new order
-  const adminEmail = "java@gmail.com"; // Replace with actual admin email
+  const adminEmail = "nishant.ranjan1984@gmail.com"; // Replace with actual admin email
   const adminOrderItems = order.orderItems
     .map(
       (item) =>
@@ -72,11 +69,11 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     )
     .join("\n");
 
-  // await sendEmail(
-  //   adminEmail,
-  //   "New Order Notification",
-  //   `Dear Admin,\n\nA new order has been placed.\n\nOrder ID: ${order._id}\nTotal Amount: ${totalPrice}\n\nOrder Items:\n${adminOrderItems}\n\nPlease log in to the admin panel to process the order.\n\nBest Regards,\nJava Sports`
-  // );
+  await sendEmail(
+    adminEmail,
+    "New Order Notification",
+    `Dear Admin,\n\nA new order has been placed.\n\nOrder ID: ${order._id}\nTotal Amount: ${totalPrice}\n\nOrder Items:\n${adminOrderItems}\n\nPlease log in to the admin panel to process the order.\n\nBest Regards,\nJava Sports`
+  );
 
   // Respond to the client
   res.status(201).json({
@@ -226,7 +223,7 @@ exports.cancelOrder = catchAsyncErrors(async (req, res, next) => {
   );
 
   // Notify admin about the order cancellation
-  const adminEmail = "java@gmail.com"; // Replace with actual admin email
+  const adminEmail = "nishant.ranjan1984@gmail.com"; // Replace with actual admin email
   const adminCancelledItems = order.orderItems
     .map(
       (item) =>

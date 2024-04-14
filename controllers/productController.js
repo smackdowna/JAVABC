@@ -24,6 +24,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     color,
     Availablecolor,
     side,
+    productCode,
   } = req.body;
   const images = req.files; // Assuming you are using multer or similar middleware for multiple file uploads
 
@@ -39,7 +40,8 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     !sub_category ||
     !size ||
     !color ||
-    !Availablecolor
+    !Availablecolor ||
+    !productCode
   ) {
     return next(new ErrorHander("All Field Required", 404));
   }
@@ -73,6 +75,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     color,
     Availablecolor,
     side,
+    productCode,
     images: productImages,
   });
 

@@ -76,6 +76,10 @@ const productSchema = new mongoose.Schema({
   Availablecolor: {
     type: String,
   },
+  productCode:{
+    type: String,
+    required: [true, "Please Enter Product code"],
+  },
   numOfReviews: {
     type: Number,
     default: 0,
