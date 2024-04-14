@@ -196,7 +196,7 @@ exports.cancelOrder = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Order not found with this Id", 404));
   }
 
-  if (order.orderStatus === "cancelled") {
+  if (order.orderStatus === "Cancelled") {
     return next(new ErrorHander("This product is already cancelled", 404));
   }
 

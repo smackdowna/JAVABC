@@ -26,7 +26,7 @@ exports.getDashboardStats = catchAsyncErrors(async (req, res, next) => {
   const totalOrdersAmountCancelled = resultCancelled.length > 0 ? resultCancelled[0].totalAmountCancelled : 0;
 
 
-  // Sum of totalPrice for orders with orderStatus other than 'cancelled'
+  // // Sum of totalPrice for orders with orderStatus other than 'cancelled'
   const resultNotCancelled = await Order.aggregate([
     {
       $match: {
@@ -42,7 +42,6 @@ exports.getDashboardStats = catchAsyncErrors(async (req, res, next) => {
   ]).exec();
 
   const totalOrdersAmount = resultNotCancelled.length > 0 ? resultNotCancelled[0].totalAmountNotCancelled : 0;
-
 
 
 
@@ -71,3 +70,6 @@ exports.getDashboardStats = catchAsyncErrors(async (req, res, next) => {
     totalOrdersAmountCancelled,
   });
 });
+
+
+
