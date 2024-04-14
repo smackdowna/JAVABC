@@ -9,27 +9,33 @@ const getDataUri = require("../utils/dataUri.js");
 const Product = require("../models/productModel");
 const fs = require("fs");
 
-
 async function deleteUsersWithExpiredOTP() {
   try {
-      const currentTime = Date.now();
-      await User.deleteMany({
-          'otp_expiry': { $lte: currentTime },
-          'otp': { $ne: null }, // Exclude users who have already verified OTP
-      });
+    const currentTime = Date.now();
+    await User.deleteMany({
+      otp_expiry: { $lte: currentTime },
+      otp: { $ne: null }, // Exclude users who have already verified OTP
+    });
   } catch (error) {
-      console.error('Error deleting users with expired OTP:', error);
+    console.error("Error deleting users with expired OTP:", error);
   }
 }
 
-setInterval(deleteUsersWithExpiredOTP, 60 * 1000);
-
+setInterval(deleteUsersWithExpiredOTP, 5 * 60 * 1000);
 
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { full_name, phoneNo, email, password, confirm_password,dob } = req.body;
+  const { full_name, phoneNo, email, password, confirm_password, dob } =
+    req.body;
 
-  if (!full_name || !phoneNo || !email || !password || !confirm_password || !dob)
+  if (
+    !full_name ||
+    !phoneNo ||
+    !email ||
+    !password ||
+    !confirm_password ||
+    !dob
+  )
     return next(new ErrorHandler("Please fill all details", 400));
 
   if (password != confirm_password)
@@ -76,13 +82,12 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   Java Sports Team 🏅
   `;
 
- await sendEmail(email, "Verify your account", emailMessage);
+  await sendEmail(email, "Verify your account", emailMessage);
 
- 
   res.status(201).json({
-    success: true,   
+    success: true,
     message: "OTP sent to your email",
-  })
+  });
 });
 
 //verify
@@ -93,8 +98,7 @@ exports.verify = catchAsyncErrors(async (req, res, next) => {
 
   if (!user) {
     return next(new ErrorHandler("User Doesn't exist", 404));
-  } 
-
+  }
 
   if (user.otp !== otp || user.otp_expiry < Date.now()) {
     return res
@@ -174,7 +178,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     "host"
   )}/api/v1/password/reset/${resetToken}`;
 
-  const frontendurl= `http://localhost:3000/reset-password/${resetToken}`
+  const frontendurl = `http://localhost:3000/reset-password/${resetToken}`;
 
   const message = `Your password reset token is :- \n\n ${frontendurl} \n\nIf you have not requested this email then, please ignore it.`;
 
