@@ -14,7 +14,7 @@ exports.Contact = catchAsyncErrors(async (req, res, next) => {
     !email ||
     !message
   )
-    return next(new ErrorHandler("Please fill all details", 400));
+    return next(new ErrorHandler("Please enter all details", 400));
 
 
   const emailMessage = `Dear Nishant,
