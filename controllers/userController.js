@@ -178,12 +178,27 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     "host"
   )}/api/v1/password/reset/${resetToken}`;
 
-  const frontendurl = `http://localhost:3000/reset-password/${resetToken}`;
+  const frontendurl = `https://javasports.in/reset-password/${resetToken}`;
 
-  const message = `Your password reset token is :- \n\n ${frontendurl} \n\nIf you have not requested this email then, please ignore it.`;
+  const message = `Dear ${user.name},
+
+  We hope this email finds you well. It appears that you've requested to reset your password for your Java Sports account. We're here to assist you in securely resetting your password and getting you back to enjoying our platform hassle-free.
+  
+  To reset your password, please click on the following link:
+  
+  ${frontendurl}
+  
+  This link will expire in 15 minutes for security reasons, so please make sure to use it promptly. If you didn't initiate this password reset request, please disregard this email, and your account will remain secure.
+  
+  If you encounter any issues or have any questions, feel free to reach out to our support team at [support email] for further assistance. We're here to help you every step of the way.
+  
+  Thank you for choosing Java Sports. We appreciate your continued support.
+  
+  Best regards,
+  Java Sports Team`;
 
   try {
-    await sendEmail(user.email, "Java Sports Reset Password", message);
+    await sendEmail(user.email, "Password Reset Link for Java Sports Account", message);
 
     res.status(200).json({
       success: true,
