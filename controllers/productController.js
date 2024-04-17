@@ -14,17 +14,12 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     description,
     keyFeatures,
     specification,
-    baseprice,
-    discountedpercent,
+    sizes,
     category,
     sub_category,
     sub_category2,
-    size,
-    stock,
     color,
     Availablecolor,
-    side,
-    productCode,
   } = req.body;
   const images = req.files; // Assuming you are using multer or similar middleware for multiple file uploads
 
@@ -33,15 +28,11 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     !description ||
     !keyFeatures ||
     !specification ||
-    !baseprice ||
-    !discountedpercent ||
+    !sizes ||
     !category ||
-    !stock ||
     !sub_category ||
-    !size ||
     !color ||
-    !Availablecolor ||
-    !productCode
+    !Availablecolor
   ) {
     return next(new ErrorHander("All Field Required", 404));
   }
@@ -65,17 +56,12 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     description,
     keyFeatures,
     specification,
-    baseprice,
-    discountedpercent,
+    sizes,
     category,
     sub_category,
     sub_category2,
-    size,
-    stock,
     color,
     Availablecolor,
-    side,
-    productCode,
     images: productImages,
   });
 
