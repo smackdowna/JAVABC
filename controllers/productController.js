@@ -8,7 +8,7 @@ const User = require("../models/UserModel");
 const { myCache } = require("../app");
 
 //Create Product -- Admin
-exports.createProduct = catchAsyncErrors(async (req, res, next) => {    
+exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   const {
     name,
     description,
@@ -36,8 +36,6 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   ) {
     return next(new ErrorHander("All Field Required", 404));
   }
-
-  
 
   const productImages = [];
 
@@ -67,7 +65,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     images: productImages,
   });
 
-  myCache.del("all-products","categories");
+  myCache.del("all-products", "categories");
 
   res.status(201).json({
     success: true,
@@ -77,18 +75,18 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 
 // Get All Product
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
-  
   const productsCount = await Product.countDocuments();
 
-  const apiFeature = new ApiFeatures(Product.find().sort({ createdAt: -1 }), req.query)
+  const apiFeature = new ApiFeatures(
+    Product.find().sort({ createdAt: -1 }),
+    req.query
+  )
     .search()
     .filter();
 
   let products = await apiFeature.query;
 
   let filteredProductsCount = products.length;
-
-  
 
   products = await apiFeature.query;
 
@@ -131,10 +129,9 @@ exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
   return res.status(200).json({
     success: true,
     products,
-    productsCount
+    productsCount,
   });
 });
-
 
 // Get Product Details
 exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
@@ -158,11 +155,43 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Product not found", 404));
   }
 
-  // Handle product details update
-  product.set(req.body);
+  // Update product details
+  product.name = req.body.name || product.name;
+  product.description = req.body.description || product.description;
+  product.keyFeatures = req.body.keyFeatures || product.keyFeatures;
+  product.specification = req.body.specification || product.specification;
+  product.category = req.body.category || product.category;
+  product.sub_category = req.body.sub_category || product.sub_category;
+  product.sub_category2 = req.body.sub_category2 || product.sub_category2;
+  product.color = req.body.color || product.color;
+  product.Availablecolor = req.body.Availablecolor || product.Availablecolor;
+  product.numOfReviews = req.body.numOfReviews || product.numOfReviews;
+
+  // Update sizes array if provided in the request
+if (req.body.sizes && req.body.sizes.length > 0) {
+  // Iterate over each size object provided in the request
+  for (const updatedSize of req.body.sizes) {
+    // Log the updatedSize._id for comparison
+
+    // Find the corresponding size object in product.sizes
+    const sizeToUpdate = product.sizes.find(size => size._id.toString() === updatedSize._id.toString());
+
+    
+
+    // If the size object is found
+    if (sizeToUpdate) {
+      // Update each field of the size object if provided in the request
+      sizeToUpdate.size = updatedSize.size !== undefined ? updatedSize.size : sizeToUpdate.size;
+      sizeToUpdate.stock = updatedSize.stock !== undefined ? updatedSize.stock : sizeToUpdate.stock;
+      sizeToUpdate.basePrice = updatedSize.basePrice !== undefined ? updatedSize.basePrice : sizeToUpdate.basePrice;
+      sizeToUpdate.discountedPercent = updatedSize.discountedPercent !== undefined ? updatedSize.discountedPercent : sizeToUpdate.discountedPercent;
+    }
+  }
+}
+
+
   await product.save();
-  myCache.del("all-products","categories");
-  
+  myCache.del("all-products", "categories");
 
   // Handle image updates
   const images = req.files; // Assuming you are using multer or similar middleware for multiple file uploads
@@ -190,7 +219,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     // Update product with new images
     product.images = updatedImages;
     await product.save();
-    myCache.del("all-products","categories");
+    myCache.del("all-products", "categories");
   }
 
   res.status(200).json({
@@ -219,21 +248,19 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
 
   // Remove the product from wishlists of all users
   await User.updateMany(
-    { 'wishlist.product': productId },
+    { "wishlist.product": productId },
     { $pull: { wishlist: { product: productId } } }
   );
 
   // Remove the product itself
   await product.remove();
-  myCache.del("all-products","categories");
+  myCache.del("all-products", "categories");
 
   res.status(200).json({
     success: true,
     message: "Product Deleted Successfully",
   });
 });
-
-
 
 // Create New Review or Update the review
 exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
@@ -245,7 +272,7 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
   const review = {
     user: req.user._id,
     name: req.user.full_name,
-    avatar:req.user.avatar.url,
+    avatar: req.user.avatar.url,
     rating: Number(rating),
     comment,
   };
