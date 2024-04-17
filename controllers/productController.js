@@ -8,7 +8,7 @@ const User = require("../models/UserModel");
 const { myCache } = require("../app");
 
 //Create Product -- Admin
-exports.createProduct = catchAsyncErrors(async (req, res, next) => {
+exports.createProduct = catchAsyncErrors(async (req, res, next) => {    
   const {
     name,
     description,
@@ -36,6 +36,8 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   ) {
     return next(new ErrorHander("All Field Required", 404));
   }
+
+  
 
   const productImages = [];
 

@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema({
       basePrice:{
         type:Number
       },
-      discountedPercent:{
+      discountedPercent:{ 
         type:Number
       },
       stock:{
