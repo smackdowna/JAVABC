@@ -185,6 +185,7 @@ if (req.body.sizes && req.body.sizes.length > 0) {
       sizeToUpdate.stock = updatedSize.stock !== undefined ? updatedSize.stock : sizeToUpdate.stock;
       sizeToUpdate.basePrice = updatedSize.basePrice !== undefined ? updatedSize.basePrice : sizeToUpdate.basePrice;
       sizeToUpdate.discountedPercent = updatedSize.discountedPercent !== undefined ? updatedSize.discountedPercent : sizeToUpdate.discountedPercent;
+      sizeToUpdate.side = updatedSize.side !== undefined ? updatedSize.side : sizeToUpdate.side;
     }
   }
 }

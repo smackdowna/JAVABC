@@ -20,6 +20,9 @@ const productSchema = new mongoose.Schema({
   },
   sizes:[
     {
+      side:{
+        type:String,
+      },
       size:{
         type:String,
       },
