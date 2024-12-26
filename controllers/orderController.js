@@ -3,7 +3,7 @@ const Product = require("../models/productModel");
 const ErrorHander = require("../utils/errorhandler");
 const catchAsyncErrors = require("../middleware/catchAsyncError");
 const User = require("../models/UserModel");
-const { myCache } = require("../app");
+// const { myCache } = require("../app");
 const sendEmail = require("../utils/sendEmail.js");
 
 // Create new Order
@@ -42,7 +42,7 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     await updateStock(o.product, o.quantity);
   });
 
-  myCache.del("all-orders");
+  // myCache.del("all-orders");
 
   // Send confirmation email to the user
   // Send confirmation email to the user
@@ -122,12 +122,13 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
   const ordersCount = await Order.countDocuments();
 
   let orders;
-  if (myCache.has("all-orders")) {
-    orders = JSON.parse(myCache.get("all-orders"));
-  } else {
-    orders = await Order.find().sort({ createdAt: -1 });
-    myCache.set("all-orders", JSON.stringify(orders));
-  }
+  orders = await Order.find().sort({ createdAt: -1 });
+  // if (myCache.has("all-orders")) {
+  //   orders = JSON.parse(myCache.get("all-orders"));
+  // } else {
+  //   orders = await Order.find().sort({ createdAt: -1 });
+  //   myCache.set("all-orders", JSON.stringify(orders));
+  // }
 
   res.status(200).json({
     success: true,
@@ -156,7 +157,7 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
 
   await order.save({ validateBeforeSave: false });
 
-  myCache.del("all-orders");
+  // myCache.del("all-orders");
 
   res.status(200).json({
     success: true,
@@ -182,7 +183,7 @@ exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
 
   await order.remove();
 
-  myCache.del("all-orders");
+  // myCache.del("all-orders");
   res.status(200).json({
     success: true,
     message: "Order Deleted",
